@@ -17,8 +17,10 @@ header, footer {background: #c50e1f; color: #fff; padding: 4em;}
 main {max-width: 64em; width: 90%; margin: auto; padding: 2em 0;}
 h1 {margin: 0 auto; text-align: center;}
 header a, footer a {color: #fff; text-decoration: none;}
+a:hover {text-decoration: underline;}
 a.button {background: #c50e1f; color: #fff; text-decoration: none;
 	padding: .3em .5em .4em; border-radius: .8em;}
+a.button:hover {background: #c50e1faa}
 		</style>
 
 	</head>
@@ -31,8 +33,8 @@ a.button {background: #c50e1f; color: #fff; text-decoration: none;
 
 		<main>
 			<h2>Beitrittsantrag Förderverein FaSTTUBe e.V.</h2>
-			<form>
-				<label>Beitrittsdatum:	<br><input required type=date name=datum>    </label><br>
+			<form action="https://fasttube.de/ftfv-join" method=post>
+				<label>Beitrittsdatum:	<br><input required type=date name=start>    </label><br>
 				<label>Vornamen:		<br><input required type=text name=vornamen> </label><br>
 				<label>Nachnamen:		<br><input required type=text name=nachnamen></label><br>
 				<label>Straße, HausNr:	<br><input required type=text name=adresse1> </label><br>
@@ -46,7 +48,7 @@ a.button {background: #c50e1f; color: #fff; text-decoration: none;
 				<label>IBAN:			<br><input required type=text name=iban>     </label><br>
 				<label>Kontoinhaber:	<br><input required type=text name=inhaber>  </label><br>
 				<br>
-				<input type=submit value="Beitritt verbindlich erklären">
+				<input type=submit value="Beitritt verbindlich beantragen">
 			</form>
 		</main>
 
