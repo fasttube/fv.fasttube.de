@@ -5,6 +5,8 @@ import os, csv, datetime
 import http.server as server
 from urllib.parse import parse_qs
 
+from smtplib import SMTP
+
 CSVFILE = "applicants.csv"
 
 COLS = [
@@ -23,6 +25,35 @@ COLS = [
     "iban",
     "inhaber"
 ]
+
+def send_notif(data):
+    try:
+        conn = SMTP('smtp.office365.com', 587)
+        conn.ehlo()
+        r = conn.starttls()
+        if r[0] != 220:
+            print("No Starttls!")
+            return
+        print("STARTTLS enabled")
+        try:
+            conn.login('noreply@fasttube.de', os.environ.get('FTFV_SMTP_PW'))
+            conn.sendmail('fv@fasttube.de', 'fv@fasttube.de', ("""\
+From: Förderverein FaSTTUBe e.V. <fv@fasttube.de>
+To: Förderverein FaSTTUBe e.V. Verteiler <fv@fasttube.de>
+Subject: Neuer Aufnahmeantrag über das Beitrittsformular!
+
+Eine neue Anmeldung kann vom Server abgerufen werden. Daten:
+
+%s
+
+Bitte den Aufnahmeprozess starten.
+""" % "\n".join(data)).encode('utf-8'))
+        finally:
+            conn.quit()
+            print("Mail sent.")
+    except Exception as e:
+        print("Error while sending email:", e)
+        return
 
 class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
@@ -46,6 +77,8 @@ class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
         with open(CSVFILE, 'a+') as f:
             writer = csv.writer(f)
             writer.writerow([data.get(c, [now_iso])[0] for c in COLS])
+
+        send_notif([f"{c}: {data.get(c, [now_iso])[0]}" for c in COLS])
 
         self.send_response(201, 'Created')
         self.end_headers()
