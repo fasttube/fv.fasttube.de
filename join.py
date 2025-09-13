@@ -12,6 +12,8 @@ CSVFILE = "applicants.csv"
 COLS = [
     "einsendung",
     "start",
+    "mitgliedsart",
+    "beitrag",
     "vornamen",
     "nachnamen",
     "adresse1",
