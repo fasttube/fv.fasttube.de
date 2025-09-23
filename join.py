@@ -13,6 +13,7 @@ COLS = [
     "einsendung",
     "start",
     "mitgliedsart",
+    "ermaessigung",
     "beitrag",
     "vornamen",
     "nachnamen",

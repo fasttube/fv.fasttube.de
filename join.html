@@ -39,7 +39,8 @@ a.button:hover {background: #c50e1faa}
 					<option value="ordentlich">Ordentliches Mitglied (Mit Stimmrecht)</option>
 					<option value="foerder">Fördermitglied (Nur finanzielle Förderung)</option>
 				</select></label><br>
-				<label>Mitgliedsbeitrag:<br><input required type=number name=beitrag value="60.00" step='0.01'> € pro Jahr</label><br>
+				<label><input type=checkbox name=ermaessigung> Ich möchte den ermäßigten Mindestbeitrag (für Studierende oder in Ausbildung)</label><br>
+				<label>Mitgliedsbeitrag:<br><input required type=number name=beitrag value="100" min="50" step='0.01'> € pro Jahr</label><br>
 				<label>Vornamen:		<br><input required type=text name=vornamen> </label><br>
 				<label>Nachnamen:		<br><input required type=text name=nachnamen></label><br>
 				<label>Straße, HausNr:	<br><input required type=text name=adresse1> </label><br>
@@ -62,6 +63,25 @@ a.button:hover {background: #c50e1faa}
 			&nbsp;&middot;&nbsp; <script>document.write('<a href="mailto:'+'fv'+'@'+'fast'+'tube'+'.'+'de'+'">'+'fv'+'@'+'fast'+'tube'+'.'+'de'+'</a>');</script>
 			&nbsp;&middot;&nbsp; TU Berlin FG Kraftfahrzeuge c/o FV FaSTTUBe, Gebäude TIB 13, Gustav-Meyer-Allee 25, 13355
 		</footer>
+
+		<script>
+			var ma_e = document.querySelector('select[name=mitgliedsart]');
+			var erm_e = document.querySelector('input[name=ermaessigung]');
+			var b_e = document.querySelector('input[name=beitrag]');
+			function updbeitr(e) {
+				var ma = ma_e.value;
+				var erm = erm_e.checked;
+				var mindestbeitrag = (ma == "foerder" || erm) ? 50 : 100;
+				b_e.setAttribute("min", mindestbeitrag);
+				if (erm || (mindestbeitrag > parseInt(b_e.value))) {
+					console.log("huh")
+					b_e.value = mindestbeitrag;
+					b_e.setAttribute("value", mindestbeitrag);
+				}
+			}
+			ma_e.onchange = updbeitr
+			erm_e.onchange = updbeitr
+		</script>
 
 	</body>
 
