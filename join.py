@@ -75,7 +75,7 @@ class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
         if not os.path.exists(CSVFILE):
             print("Creating", CSVFILE, "...")
             with open(CSVFILE, 'w+') as f:
-                writer = csv.writer(f)
+                writer = csv.writer(f, delimiter=';')
                 writer.writerow(COLS)
 
         now_iso = datetime.datetime.now().isoformat()
@@ -84,7 +84,7 @@ class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
             data["ermaessigung"] = "off"
 
         with open(CSVFILE, 'a+') as f:
-            writer = csv.writer(f)
+            writer = csv.writer(f, delimiter=';')
             writer.writerow([data[c] for c in COLS])
 
         send_notif([f"{c}: {data[c]}" for c in COLS])
