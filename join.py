@@ -64,7 +64,10 @@ class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
         content_len = int(self.headers.get('content-length', 0))
         body = self.rfile.read(content_len)
-        data = parse_qs(body.decode('utf-8'))
+        raw_data = parse_qs(body.decode('utf-8'))
+
+        # Un-array the values
+        data = {c: raw_data.get(c, ["undefined"])[0] for c in COLS}
 
         print(data)
 
@@ -76,12 +79,15 @@ class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
                 writer.writerow(COLS)
 
         now_iso = datetime.datetime.now().isoformat()
+        data["einsendung"] = now_iso
+        if not "ermaessigung" in raw_data:
+            data["ermaessigung"] = "off"
 
         with open(CSVFILE, 'a+') as f:
             writer = csv.writer(f)
-            writer.writerow([data.get(c, [now_iso])[0] for c in COLS])
+            writer.writerow([data[c] for c in COLS])
 
-        send_notif([f"{c}: {data.get(c, [now_iso])[0]}" for c in COLS])
+        send_notif([f"{c}: {data[c]}" for c in COLS])
 
         self.send_response(201, 'Created')
         self.end_headers()
